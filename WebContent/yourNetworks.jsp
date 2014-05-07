@@ -25,7 +25,7 @@
 			Statement stmt = con.createStatement();
 			ResultSet rs = stmt.executeQuery("SELECT DISTINCT network_name FROM Network WHERE creator = '" + session.getAttribute("username") + "'");
 			%>
-			<form action="networks.jsp">
+			<form action="yourNetworks.jsp">
 			<select name="network_name">
 			<%
 			while(rs.next()) {

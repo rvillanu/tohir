@@ -7,37 +7,52 @@
 <title>Explore</title>
 </head>
 <body>
+	<form action="explore.jsp">
+		Explore networks: <input type="text" name="searchTerm">
+		<input type="submit" name="action" value="Explore">
+	</form>
 	<%try {
 		DriverManager.registerDriver(new com.microsoft.sqlserver.jdbc.SQLServerDriver());
 		Connection con = DriverManager.getConnection("jdbc:sqlserver://localhost:1433;databaseName=bimm185",
 				 									"sa", "jose");
 		Statement stmt = con.createStatement();
 		ResultSet rs = null;
-		if (request.getParameter("searchTerm").isEmpty()) {
-			rs = stmt.executeQuery("SELECT DISTINCT network_name, creator FROM Network");
-			%>
-			<table border="1">
-				<tr>
-					<th>Network Name</th>
-					<th>Creator</th>
-					<th>Action</th>
-				</tr>
-			<%
-			while (rs.next()) {
+		if (request.getParameter("searchTerm") != null) {
+			if (request.getParameter("searchTerm").isEmpty()) {
+				rs = stmt.executeQuery("SELECT DISTINCT network_name, creator FROM Network");
 				%>
-				<tr>
-					<td><%=rs.getString("network_name")%></td>
-					<td><%=rs.getString("creator")%></td>
-				</tr>
+				<table border="1">
+					<tr>
+						<th>Network Name</th>
+						<th>Creator</th>
+						<th>Action</th>
+					</tr>
+					<form>
+				<%
+				while (rs.next()) {
+					%>
+					<tr>
+						<td>
+							<input type="text" value="<%=rs.getString("network_name")%>" readonly>
+						</td>
+						<td>
+							<input type="text" value="<%=rs.getString("creator")%>" readonly>
+						</td>
+						<td>
+							<input type="submit" value="View">
+						</td>
+					</tr>
+					<%
+				}
+				%>
+					</form>
+				</table>
 				<%
 			}
-			%>
-			</table>
-			<%
-		}
-		else {
-			
-			
+			else {
+				// searchTerm is not empty. User wants to search something. What should you return?
+				
+			}
 		}
 	} catch (SQLException sqle) {
 		System.out.println(sqle.getMessage());

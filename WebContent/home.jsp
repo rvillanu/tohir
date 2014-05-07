@@ -23,7 +23,7 @@
 			Explore networks: <input type="text" name="searchTerm">
 			<input type="submit" name="action" value="Explore">
 		</form>
-		<a href="networks.jsp">Your networks</a>
+		<a href="yourNetworks.jsp">Your networks</a>
 		<a href="new.jsp">Add a new network</a>
 		<a href="">Update your networks</a>
 
