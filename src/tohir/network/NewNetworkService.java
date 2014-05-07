@@ -33,18 +33,19 @@ public class NewNetworkService {
 					/* To maintain data integrity of my db, I insert a PPI like so (HGNC_ID_proteinA, HGNC_ID_proteinB)
 					 * HGNC_ID_proteinA < HGNC_ID_proteinB
 					 */
-					String proteinA_id = nodes[0];
-					String proteinB_id = nodes[1];
-					if (nodes[0].compareTo(nodes[1]) > 0 ) {
-						proteinA_id = nodes[1];
-						proteinB_id = nodes[0];
+					int proteinA_id = Integer.parseInt(nodes[0]);
+					int proteinB_id = Integer.parseInt(nodes[1]);
+					if (proteinA_id > proteinB_id) {
+						proteinA_id = Integer.parseInt(nodes[1]);
+						proteinB_id = Integer.parseInt(nodes[0]);
 					}
+					System.out.println("proteinA: " + proteinA_id + ", proteinB: " + proteinB_id);
 					// Network(creator, network_name, proteinA_id, proteinB_id)
 					pstmt = con.prepareStatement("INSERT INTO Network VALUES (?, ?, ?, ?)");
 					pstmt.setString(1, username);
 					pstmt.setString(2, networkName);
-					pstmt.setInt(3, Integer.parseInt(proteinA_id));
-					pstmt.setInt(4, Integer.parseInt(proteinB_id));
+					pstmt.setInt(3, proteinA_id);
+					pstmt.setInt(4, proteinB_id);
 					int rowCount = pstmt.executeUpdate();
 				}
 				con.commit();
