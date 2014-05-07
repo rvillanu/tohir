@@ -54,9 +54,11 @@ public class NewNetworkServlet extends HttpServlet {
 		String INSERT = service.createNewNetwork(networkName, username, networkFile);
 		if (INSERT.equals("OK")) {
 			System.out.println("NewNetworkServlet: OK, Network successfully created!");
+			response.sendRedirect("newSuccess.jsp");
 		}
 		else {
 			System.out.println("NewNetworkServlet: Network could not be created.");
+			response.sendRedirect("newFail.jsp");
 		}
 	
 	}
