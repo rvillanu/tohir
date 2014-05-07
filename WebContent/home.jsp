@@ -19,7 +19,7 @@
 		<form action="LogoutServlet">
 			<input type="submit" value="logout">
 		</form>
-		<form>
+		<form action="explore.jsp">
 			Explore networks: <input type="text" name="searchTerm">
 			<input type="submit" name="action" value="Explore">
 		</form>
