@@ -12,6 +12,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
 
 /**
@@ -42,16 +43,22 @@ public class NewNetworkServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		System.out.println(request.getParameter("networkName"));
+		HttpSession session = request.getSession();
+		String username = (String) session.getAttribute("username");
+		String networkName = request.getParameter("networkName");
+		System.out.println(networkName);
 		Part networkFile = request.getPart("networkFile");
 		InputStream is = networkFile.getInputStream();
-	
-		BufferedReader br = new BufferedReader(new InputStreamReader(is));
-		String line = null;
-		while((line = br.readLine()) != null) {
-			System.out.print(line);
-		}
 		
+		NewNetworkService service = new NewNetworkService();
+		String INSERT = service.createNewNetwork(networkName, username, networkFile);
+		if (INSERT.equals("OK")) {
+			System.out.println("NewNetworkServlet: OK, Network successfully created!");
+		}
+		else {
+			System.out.println("NewNetworkServlet: Network could not be created.");
+		}
+	
 	}
 
 }
