@@ -19,7 +19,7 @@
 		ResultSet rs = null;
 		if (request.getParameter("searchTerm") != null) {
 			if (request.getParameter("searchTerm").isEmpty()) {
-				rs = stmt.executeQuery("SELECT DISTINCT network_name, creator FROM Network");
+				rs = stmt.executeQuery("SELECT DISTINCT network_name, creator, visibility FROM Network");
 				%>
 				<table border="1">
 					<tr>
@@ -30,19 +30,21 @@
 					<form>
 				<%
 				while (rs.next()) {
-					%>
-					<tr>
-						<td>
-							<input type="text" value="<%=rs.getString("network_name")%>" readonly>
-						</td>
-						<td>
-							<input type="text" value="<%=rs.getString("creator")%>" readonly>
-						</td>
-						<td>
-							<input type="submit" value="View">
-						</td>
-					</tr>
-					<%
+					if (rs.getString("visibility").equals("public")) {
+						%>
+						<tr>
+							<td>
+								<input type="text" value="<%=rs.getString("network_name")%>" readonly>
+							</td>
+							<td>
+								<input type="text" value="<%=rs.getString("creator")%>" readonly>
+							</td>
+							<td>
+								<input type="submit" value="View">
+							</td>
+						</tr>
+						<%
+					}
 				}
 				%>
 					</form>
