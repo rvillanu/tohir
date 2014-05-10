@@ -9,7 +9,7 @@ import java.sql.*;
 import javax.servlet.http.Part;
 
 public class NewNetworkService {
-	public String createNewNetwork(String networkName, String username, Part networkFile) {
+	public String createNewNetwork(String networkName, String username, Part networkFile, String visibility) {
 		try {
 			DriverManager.registerDriver(new com.microsoft.sqlserver.jdbc.SQLServerDriver());
 			Connection con = DriverManager.getConnection("jdbc:sqlserver://localhost:1433;databaseName=bimm185",
@@ -41,11 +41,17 @@ public class NewNetworkService {
 					}
 					System.out.println("proteinA: " + proteinA_id + ", proteinB: " + proteinB_id);
 					// Network(creator, network_name, proteinA_id, proteinB_id)
-					pstmt = con.prepareStatement("INSERT INTO Network VALUES (?, ?, ?, ?)");
+					pstmt = con.prepareStatement("INSERT INTO Network VALUES (?, ?, ?, ?, ?)");
 					pstmt.setString(1, username);
 					pstmt.setString(2, networkName);
 					pstmt.setInt(3, proteinA_id);
 					pstmt.setInt(4, proteinB_id);
+					if (visibility == null) {
+						pstmt.setString(5, "public");
+					}
+					else {
+						pstmt.setString(5, "private");
+					}
 					int rowCount = pstmt.executeUpdate();
 				}
 				con.commit();

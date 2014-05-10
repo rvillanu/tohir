@@ -43,15 +43,16 @@ public class NewNetworkServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
+		Part networkFile = request.getPart("networkFile");		
 		HttpSession session = request.getSession();
 		String username = (String) session.getAttribute("username");
 		String networkName = request.getParameter("networkName");
 		System.out.println(networkName);
-		Part networkFile = request.getPart("networkFile");
 		InputStream is = networkFile.getInputStream();
-		
+		String visibility = request.getParameter("visibility");
+		System.out.println(visibility);
 		NewNetworkService service = new NewNetworkService();
-		String INSERT = service.createNewNetwork(networkName, username, networkFile);
+		String INSERT = service.createNewNetwork(networkName, username, networkFile, visibility);
 		if (INSERT.equals("OK")) {
 			System.out.println("NewNetworkServlet: OK, Network successfully created!");
 			response.sendRedirect("newSuccess.jsp");
@@ -60,7 +61,7 @@ public class NewNetworkServlet extends HttpServlet {
 			System.out.println("NewNetworkServlet: Network could not be created.");
 			response.sendRedirect("newFail.jsp");
 		}
-	
+		
 	}
 
 }
