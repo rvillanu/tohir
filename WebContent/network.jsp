@@ -8,7 +8,7 @@
 </head>
 <body>
 	<%
-	String username = null;
+	String creator = null;
 	if (request.getParameter("from") == null) {
 	%>
 		<a href="home.jsp">home</a>
@@ -17,13 +17,13 @@
 	}
 	else {
 		if (request.getParameter("from").equals("yourNetworks")) {
-			username = (String) session.getAttribute("username");
+			creator = (String) session.getAttribute("username");
 		}
 		else if (request.getParameter("from").equals("explore")) {
-			username = (String) request.getParameter("creator");
+			creator = (String) request.getParameter("creator");
 		}
 		String network_name = request.getParameter("network_name");
-		System.out.println("network.jsp: username = " + username);
+		System.out.println("network.jsp: creator = " + creator);
 		if (request.getParameter("network_name") == null) {
 		%>
 			<a href="home.jsp">No network selected</a>
@@ -35,12 +35,12 @@
 				Connection con = DriverManager.getConnection("jdbc:sqlserver://localhost:1433;databaseName=bimm185",
 						 									"sa", "jose");
 				Statement stmt = con.createStatement();
-				ResultSet rs = stmt.executeQuery("SELECT proteinA_id, proteinB_id FROM NetworkEdges WHERE network_creator = '" + username + "' " + 
+				ResultSet rs = stmt.executeQuery("SELECT proteinA_id, proteinB_id FROM NetworkEdges WHERE network_creator = '" + creator + "' " + 
 										 "AND network_name = '" + network_name + "'");
 			%>
 				<table border="1">
 					<tr>
-						<th>Network: <%=network_name%></th>
+						<th>Network: <%=network_name%> | Creator: <%= creator %></th>
 					</tr>
 					<tr>
 						<th>Protein A</th>
