@@ -26,6 +26,7 @@
 			ResultSet rs = stmt.executeQuery("SELECT network_name FROM Network WHERE creator = '" + session.getAttribute("username") + "'");
 			%>
 			<form action="network.jsp">
+			<input type=hidden name="from" value="yourNetworks">
 			<select name="network_name">
 			<%
 			while(rs.next()) {

@@ -27,17 +27,18 @@
 						<th>Creator</th>
 						<th>Action</th>
 					</tr>
-					<form>
+					<form action="network.jsp">
+						<input type="hidden" name="from" value="explore">
 				<%
 				while (rs.next()) {
 					if (rs.getString("visibility").equals("public")) {
 						%>
 						<tr>
 							<td>
-								<input type="text" value="<%=rs.getString("network_name")%>" readonly>
+								<input type="text" name="network_name" value="<%=rs.getString("network_name")%>" readonly>
 							</td>
 							<td>
-								<input type="text" value="<%=rs.getString("creator")%>" readonly>
+								<input type="text" name="creator" value="<%=rs.getString("creator")%>" readonly>
 							</td>
 							<td>
 								<input type="submit" value="View">

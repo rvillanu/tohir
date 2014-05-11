@@ -46,9 +46,9 @@ public class NewNetworkServlet extends HttpServlet {
 		HttpSession session = request.getSession();
 		String username = (String) session.getAttribute("username");
 		String networkName = request.getParameter("networkName");
-		System.out.println(networkName);
+		System.out.println("NewNetworkServlet: networkName = " + networkName);
 		String visibility = request.getParameter("visibility");
-		System.out.println(visibility);
+		System.out.println("NewNetworkServlet: visibility = " + visibility);
 		NewNetworkService service = new NewNetworkService();
 		String INSERT = service.createNewNetwork(networkName, username, visibility);
 		if (INSERT.equals("OK")) {
