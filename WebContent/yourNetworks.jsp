@@ -23,9 +23,9 @@
 			Connection con = DriverManager.getConnection("jdbc:sqlserver://localhost:1433;databaseName=bimm185",
 					 									"sa", "jose");
 			Statement stmt = con.createStatement();
-			ResultSet rs = stmt.executeQuery("SELECT DISTINCT network_name FROM Network WHERE creator = '" + session.getAttribute("username") + "'");
+			ResultSet rs = stmt.executeQuery("SELECT network_name FROM Network WHERE creator = '" + session.getAttribute("username") + "'");
 			%>
-			<form action="yourNetworks.jsp">
+			<form action="network.jsp">
 			<select name="network_name">
 			<%
 			while(rs.next()) {
@@ -37,38 +37,10 @@
 			rs.close();
 			%>
 			</select>
-			<input type="submit" name="action" value="Select">
+			<input type="submit" value="View">
 			</form>
 			<%
-			String action = request.getParameter("action");
-			String username = (String) session.getAttribute("username");
-			String network_name = request.getParameter("network_name");
-			if (action != null && action.equals("Select")) {
-				System.out.println("User wants to see network: " + network_name);
-				rs = stmt.executeQuery("SELECT proteinA_id, proteinB_id FROM Network WHERE creator = '" + username + "' " + 
-									 "AND network_name = '" + network_name + "'");
-				%>
-				<table border="1">
-					<tr>
-						<th><%=network_name%></th>
-					</tr>
-					<tr>
-						<th>Protein A</th>
-						<th>Protein B</th>
-					</tr>
-					<%
-					while (rs.next()) {
-					%>
-						<tr>
-							<td><%= rs.getInt("proteinA_id") %></td>
-							<td><%= rs.getInt("proteinB_id") %></td>
-						</tr>
-					<%
-					}
-					%>
-				</table>
-				<%
-			}
+			
 		} catch (Exception e) {
 				System.out.println(e.getMessage());
 		}

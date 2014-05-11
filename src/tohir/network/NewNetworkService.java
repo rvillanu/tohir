@@ -9,13 +9,13 @@ import java.sql.*;
 import javax.servlet.http.Part;
 
 public class NewNetworkService {
-	public String createNewNetwork(String networkName, String username, Part networkFile, String visibility) {
+	public String createNewNetwork(String networkName, String username, String visibility) {
 		try {
 			DriverManager.registerDriver(new com.microsoft.sqlserver.jdbc.SQLServerDriver());
 			Connection con = DriverManager.getConnection("jdbc:sqlserver://localhost:1433;databaseName=bimm185",
 					 									"sa", "jose");
 			Statement stmt = con.createStatement();
-			ResultSet rs = stmt.executeQuery("SELECT * FROM Network WHERE network_name = '" + networkName + "'");
+			ResultSet rs = stmt.executeQuery("SELECT * FROM Network WHERE network_name = '" + networkName + "' AND creator = '" + username + "'");
 			if (rs.isBeforeFirst()) {
 				rs.close();
 				stmt.close();
@@ -25,41 +25,21 @@ public class NewNetworkService {
 			else {
 				PreparedStatement pstmt = null;
 				con.setAutoCommit(false);
-				InputStream is = networkFile.getInputStream();
-				BufferedReader br = new BufferedReader(new InputStreamReader(is));
-				String line = null;
-				while((line = br.readLine()) != null) {
-					String [] nodes = line.split(",");
-					/* To maintain data integrity of my db, I insert a PPI like so (HGNC_ID_proteinA, HGNC_ID_proteinB)
-					 * HGNC_ID_proteinA < HGNC_ID_proteinB
-					 */
-					int proteinA_id = Integer.parseInt(nodes[0]);
-					int proteinB_id = Integer.parseInt(nodes[1]);
-					if (proteinA_id > proteinB_id) {
-						proteinA_id = Integer.parseInt(nodes[1]);
-						proteinB_id = Integer.parseInt(nodes[0]);
-					}
-					System.out.println("proteinA: " + proteinA_id + ", proteinB: " + proteinB_id);
-					// Network(creator, network_name, proteinA_id, proteinB_id)
-					pstmt = con.prepareStatement("INSERT INTO Network VALUES (?, ?, ?, ?, ?)");
-					pstmt.setString(1, username);
-					pstmt.setString(2, networkName);
-					pstmt.setInt(3, proteinA_id);
-					pstmt.setInt(4, proteinB_id);
-					if (visibility == null) {
-						pstmt.setString(5, "public");
-					}
-					else {
-						pstmt.setString(5, "private");
-					}
-					int rowCount = pstmt.executeUpdate();
+				pstmt = con.prepareStatement("INSERT INTO Network VALUES (?, ?, ?)");
+				pstmt.setString(1, username);
+				pstmt.setString(2, networkName);
+				if (visibility == null) {
+					pstmt.setString(3, "public");
 				}
+				else {
+					pstmt.setString(3, "private");
+				}
+				int rowCount = pstmt.executeUpdate();
+				
 				con.commit();
 				con.setAutoCommit(true);
 				pstmt.close();
 				con.close();
-				br.close();
-				is.close();
 				return "OK";
 			}
 		} catch (Exception e) {

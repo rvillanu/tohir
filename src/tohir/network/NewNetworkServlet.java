@@ -43,16 +43,14 @@ public class NewNetworkServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		Part networkFile = request.getPart("networkFile");		
 		HttpSession session = request.getSession();
 		String username = (String) session.getAttribute("username");
 		String networkName = request.getParameter("networkName");
 		System.out.println(networkName);
-		InputStream is = networkFile.getInputStream();
 		String visibility = request.getParameter("visibility");
 		System.out.println(visibility);
 		NewNetworkService service = new NewNetworkService();
-		String INSERT = service.createNewNetwork(networkName, username, networkFile, visibility);
+		String INSERT = service.createNewNetwork(networkName, username, visibility);
 		if (INSERT.equals("OK")) {
 			System.out.println("NewNetworkServlet: OK, Network successfully created!");
 			response.sendRedirect("newSuccess.jsp");

@@ -7,7 +7,9 @@
 <title>Network Created</title>
 </head>
 <body>
-<h3>You have successfully created a network.</h3>
 <a href="home.jsp">home</a>
+<h3>You have successfully created a network.</h3>
+<a href="network.jsp">Click here to add data.</a>
+
 </body>
 </html>
