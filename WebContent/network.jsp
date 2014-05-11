@@ -9,19 +9,20 @@
 <body>
 	<%
 	String username = null;
-	if (request.getParameter("from").equals("yourNetworks")) {
-		username = (String) session.getAttribute("username");
-	}
-	else if (request.getParameter("from").equals("explore")) {
-		username = (String) request.getParameter("creator");
-	}
-	String network_name = request.getParameter("network_name");
-	if (session.getAttribute("username") == null) {
+	if (request.getParameter("from") == null) {
 	%>
-		<a href="login.jsp">Please login first.</a>
-	<% 
+		<a href="home.jsp">home</a>
+		<h3>No network selected.</h3>
+	<%
 	}
 	else {
+		if (request.getParameter("from").equals("yourNetworks")) {
+			username = (String) session.getAttribute("username");
+		}
+		else if (request.getParameter("from").equals("explore")) {
+			username = (String) request.getParameter("creator");
+		}
+		String network_name = request.getParameter("network_name");
 		System.out.println("network.jsp: username = " + username);
 		if (request.getParameter("network_name") == null) {
 		%>
@@ -54,15 +55,17 @@
 						</tr>
 					<%
 					}
-			} catch (Exception e) {
-				System.out.println(e.getMessage());
-			}
+				} catch (Exception e) {
+					System.out.println(e.getMessage());
+				}
 		}
-	}
 				%>
 				</table>
 		Please upload your network data in CSV formatted txt file. Each line should contain a single binary interaction (ie: HGNC ID of Protein A,HGNC ID of Protein B)<br>
 		Go to <a href="http://www.genenames.org/cgi-bin/download?col=gd_hgnc_id&col=gd_app_sym&col=gd_app_name&col=gd_status&col=gd_prev_sym&col=gd_aliases&col=gd_pub_chrom_map&col=gd_pub_acc_ids&col=gd_pub_refseq_ids&status=Approved&status=Entry+Withdrawn&status_opt=2&where=&order_by=gd_hgnc_id&format=text&limit=&hgnc_dbtag=on&submit=submit">HGNC</a> to find the HGNC ID of your protein.<br>
 		<input type="file" name="networkFile"><br>
+	<%
+	}
+	%>
 </body>
 </html>
