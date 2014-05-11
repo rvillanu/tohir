@@ -59,7 +59,7 @@ public class NewNetworkServlet extends HttpServlet {
 		}
 		else {
 			System.out.println("NewNetworkServlet: Network could not be created.");
-			response.sendRedirect("newFail.jsp");
+			response.sendRedirect("newError.jsp");
 		}
 		
 	}

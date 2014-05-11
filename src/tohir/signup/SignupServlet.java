@@ -43,6 +43,7 @@ public class SignupServlet extends HttpServlet {
 		}
 		else {
 			System.out.println("SignupServlet: Signup failed!");
+			response.sendRedirect("signupError.jsp");
 		}
 	}
 
