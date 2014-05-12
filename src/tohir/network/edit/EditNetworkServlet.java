@@ -2,6 +2,7 @@ package tohir.network.edit;
 
 import java.io.IOException;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -47,8 +48,15 @@ public class EditNetworkServlet extends HttpServlet {
 		System.out.println("EditNetworkServlet: username, action, network_name, network_creator, newProteinA, newProteinB");
 		System.out.println("EditNetworkServlet: " + username + ", " + action + ", " + network_name + ", " +  network_creator + ", " + Integer.toString(newProteinA) + ", " + Integer.toString(newProteinB));
 		if (action.equals("insert")) {
-			// check if session username is network_creator (or collaborator) -- check this in the service.
-			//service.NetworkInsert(); 
+			String trans = service.NetworkInsert(username, network_creator, network_name, newProteinA, newProteinB); 
+			if (trans.equals("OK")) {
+				// you have to use requestDispatcher ... bc you need to resend network_name, network_creator
+				request.setAttribute("network_name", network_name);
+				request.setAttribute("network_creator", network_creator);
+				RequestDispatcher dispatcher = request.getRequestDispatcher("edit.jsp");
+				dispatcher.forward(request, response);
+				//response.sendRedirect("edit.jsp"); // should send to a page asking if he's done adding contributions
+			}
 		}
 		if (action.equals("delete")) {
 			

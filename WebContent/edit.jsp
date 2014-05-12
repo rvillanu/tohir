@@ -17,7 +17,7 @@ if (session.getAttribute("username") == null) {
 }
 else {
 	
-	if (request.getParameter("network_name") == null && request.getParameter("network_creator") == null) {
+	if ( (request.getParameter("network_name") == null && request.getParameter("network_creator") == null) && (request.getAttribute("network_name") == null && request.getAttribute("network_creator") == null) ) {
 		%>
 		<a href="home.jsp">Please choose a network to edit</a>
 		<%
@@ -27,8 +27,16 @@ else {
 			DriverManager.registerDriver(new com.microsoft.sqlserver.jdbc.SQLServerDriver());
 			Connection con = DriverManager.getConnection("jdbc:sqlserver://localhost:1433;databaseName=bimm185",
 					 									"sa", "jose");
-			String creator = request.getParameter("network_creator");
-			String network_name = request.getParameter("network_name");
+			String creator;
+			String network_name;
+			if (request.getParameter("network_name") != null && request.getParameter("network_creator") != null) {
+				creator = request.getParameter("network_creator");
+				network_name = request.getParameter("network_name");
+			}
+			else {
+				creator = (String) request.getAttribute("network_name");
+				network_name = (String) request.getAttribute("network_creator");
+			}
 			Statement stmt = con.createStatement();
 			ResultSet rs = stmt.executeQuery("SELECT proteinA_id, proteinB_id " +
 												"FROM NetworkEdges " +
@@ -67,7 +75,7 @@ else {
 								<input value="<%=rs.getInt("proteinB_id") %>" name="proteinB">
 							</td>
 							<td>
-								<input type="submit" name="Delete">
+								<input type="submit" value="Delete">
 							</td>
 						</form>
 					</tr>
