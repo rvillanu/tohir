@@ -15,11 +15,22 @@ public class EditNetworkService {
 			Connection con = DriverManager.getConnection("jdbc:sqlserver://localhost:1433;databaseName=bimm185",
 					 									"sa", "jose");
 			PreparedStatement pstmt = null;
+			Statement stmt = con.createStatement();
 			con.setAutoCommit(false);
+			boolean usernameIsACollaborator = false;
+			ResultSet rs = stmt.executeQuery("SELECT collaborator " + 
+												"FROM Collaborators WHERE network_creator = '" + network_creator + "' " +
+												"AND network_name = '" + network_name + "'");
+			while (rs.next()) {
+				if (rs.getString("collaborator").equals(username)) {
+					System.out.println("ok, you're a collaborator");
+					usernameIsACollaborator = true;
+				}
+			}
 			// if session username is owner or collaborator, then go ahead and just insert 
-			if (username.equals(network_creator)) {
+			if (username.equals(network_creator) || usernameIsACollaborator) {
 				pstmt = con.prepareStatement("INSERT INTO NetworkEdges VALUES (?, ?, ?, ?)");
-				pstmt.setString(1, username);
+				pstmt.setString(1, network_creator);
 				pstmt.setString(2, network_name);
 				if (newProteinA < newProteinB) {
 					pstmt.setInt(3, newProteinA);
@@ -39,7 +50,7 @@ public class EditNetworkService {
 			// else call requestNetworkInsert in here
 			return "OK";
 		} catch (Exception e) {
-			System.out.println(e.getMessage());
+			System.out.println("EditNetworkService: oops -- " + e.getMessage());
 			return e.getMessage();
 		}
 		
