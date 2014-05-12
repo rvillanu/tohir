@@ -23,7 +23,7 @@ public class EditNetworkService {
 												"AND network_name = '" + network_name + "'");
 			while (rs.next()) {
 				if (rs.getString("collaborator").equals(username)) {
-					System.out.println("ok, you're a collaborator");
+					System.out.println("EditNetworkService: ok, you're a collaborator");
 					usernameIsACollaborator = true;
 				}
 			}
@@ -69,10 +69,23 @@ public class EditNetworkService {
 			Connection con = DriverManager.getConnection("jdbc:sqlserver://localhost:1433;databaseName=bimm185",
 					 									"sa", "jose");
 			PreparedStatement pstmt = null;
+			Statement stmt = con.createStatement();
 			con.setAutoCommit(false);
-			if (username.equals(network_creator)) {
+			boolean usernameIsACollaborator = false;
+			String sql = "SELECT collaborator " + 
+					"FROM Collaborators WHERE network_creator = '" + network_creator + "' " +
+					"AND network_name = '" + network_name + "'";
+			System.out.println(sql);
+			ResultSet rs = stmt.executeQuery(sql);
+			while (rs.next()) {
+				if (rs.getString("collaborator").equals(username)) {
+					System.out.println("EditNetworkService: ok, you're a collaborator");
+					usernameIsACollaborator = true;
+				}
+			}
+			if (username.equals(network_creator) || usernameIsACollaborator) {
 				pstmt = con.prepareStatement("DELETE FROM NetworkEdges WHERE network_creator = ? AND network_name = ? AND proteinA_id = ? AND proteinB_id = ?");
-				pstmt.setString(1, username);
+				pstmt.setString(1, network_creator);
 				pstmt.setString(2, network_name);
 				pstmt.setInt(3, proteinA);
 				pstmt.setInt(4, proteinB);
@@ -83,7 +96,7 @@ public class EditNetworkService {
 			
 			return "OK";
 		} catch (Exception e) {
-			System.out.println(e.getMessage());
+			System.out.println("EditNetworkService: oops -- " + e.getMessage());
 			return e.getMessage();
 		}
 	}
