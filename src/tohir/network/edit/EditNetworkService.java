@@ -8,7 +8,7 @@ public class EditNetworkService {
 		return "OK";
 	}
 	
-	public String NetworkInsert(String username, String network_creator, String network_name, int newProteinA, int newProteinB) {
+	public String networkInsert(String username, String network_creator, String network_name, int newProteinA, int newProteinB) {
 		
 		try {
 			DriverManager.registerDriver(new com.microsoft.sqlserver.jdbc.SQLServerDriver());
@@ -48,11 +48,33 @@ public class EditNetworkService {
 	}
 	
 	public String requestNetworkDelete() {
+
 		return "OK";
 	}
 	
-	public String NetworkDelete() {
-		return "OK";
+	public String networkDelete(String username, String network_creator, String network_name, int proteinA, int proteinB) {
+		try {
+			DriverManager.registerDriver(new com.microsoft.sqlserver.jdbc.SQLServerDriver());
+			Connection con = DriverManager.getConnection("jdbc:sqlserver://localhost:1433;databaseName=bimm185",
+					 									"sa", "jose");
+			PreparedStatement pstmt = null;
+			con.setAutoCommit(false);
+			if (username.equals(network_creator)) {
+				pstmt = con.prepareStatement("DELETE FROM NetworkEdges WHERE network_creator = ? AND network_name = ? AND proteinA_id = ? AND proteinB_id = ?");
+				pstmt.setString(1, username);
+				pstmt.setString(2, network_name);
+				pstmt.setInt(3, proteinA);
+				pstmt.setInt(4, proteinB);
+				pstmt.executeUpdate();
+				con.commit();
+				con.setAutoCommit(true);
+			}
+			
+			return "OK";
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+			return e.getMessage();
+		}
 	}
 	
 }
