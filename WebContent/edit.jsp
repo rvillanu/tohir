@@ -7,7 +7,7 @@
 <title>Edit</title>
 </head>
 <body>
-Hello <%= (String) session.getAttribute("username") %>! <%=request.getParameter("network_name") %> <%=request.getParameter("network_creator") %> 
+Hello <%= (String) session.getAttribute("username") %>! NetworkName: <%=request.getParameter("network_name") %> NetworkCreator: <%=request.getParameter("network_creator") %> 
 
 <%
 if (session.getAttribute("username") == null) {
@@ -46,8 +46,10 @@ else {
 				<tr>
 					<form action="EditNetworkServlet" method="post">
 						<input type="hidden" name="action" value="insert">
-						<th><input value="" name="proteinA_id"></th>
-						<th><input value="" name="proteinB_id"></th>
+						<input type="hidden" name="network_name" value="<%=network_name%>">
+						<input type="hidden" name="network_creator" value="<%=creator %>">
+						<th><input value="" name="newProteinA"></th>
+						<th><input value="" name="newProteinB"></th>
 						<th><input type="submit" value="Insert"></th>
 					</form>
 				<%
@@ -56,11 +58,13 @@ else {
 					<tr>
 						<form action="EditNetworkServlet" method="post">
 							<input type="hidden" name="action" value="delete">
+							<input type="hidden" name="network_name" value="<%=network_name%>">
+							<input type="hidden" name="network_creator" value="<%=creator %>">
 							<td>
-								<input value="<%=rs.getInt("proteinA_id") %>" name="proteinA_id">
+								<input value="<%=rs.getInt("proteinA_id") %>" name="proteinA">
 							</td>
 							<td>
-								<input value="<%=rs.getInt("proteinB_id") %>" name="proteinB_id">
+								<input value="<%=rs.getInt("proteinB_id") %>" name="proteinB">
 							</td>
 							<td>
 								<input type="submit" name="Delete">
