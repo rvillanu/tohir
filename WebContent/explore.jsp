@@ -27,7 +27,7 @@
 						<th>Creator</th>
 						<th>Action</th>
 					</tr>
-					<form action="network.jsp">
+					<form action="network.jsp" method="post">
 						<input type="hidden" name="from" value="explore">
 				<%
 				while (rs.next()) {

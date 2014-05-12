@@ -16,8 +16,10 @@
 	<%
 	}
 	else {
+		boolean ownerIsViewing = false;
 		if (request.getParameter("from").equals("yourNetworks")) {
 			creator = (String) session.getAttribute("username");
+			ownerIsViewing = true;
 		}
 		else if (request.getParameter("from").equals("explore")) {
 			creator = (String) request.getParameter("creator");
@@ -37,6 +39,16 @@
 				Statement stmt = con.createStatement();
 				ResultSet rs = stmt.executeQuery("SELECT proteinA_id, proteinB_id FROM NetworkEdges WHERE network_creator = '" + creator + "' " + 
 										 "AND network_name = '" + network_name + "'");
+				if (ownerIsViewing) {
+					%>
+					<form action="collaborators.jsp" method="post">
+						<input type="hidden" name="network_creator" value="<%=creator %>">
+						<input type="hidden" name="network_name" value="<%=network_name%>">
+						<input type="submit" value="Collaborators">
+					</form>
+					<%
+				}
+			
 			%>
 				<table border="1">
 					<tr>
