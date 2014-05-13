@@ -61,6 +61,8 @@ public class EditNetworkServlet extends HttpServlet {
 		if (action.equals("delete")) {
 			int proteinA = Integer.parseInt(request.getParameter("proteinA"));
 			int proteinB = Integer.parseInt(request.getParameter("proteinB"));
+			System.out.println("EditNetworkServlet: username, action, network_name, network_creator, proteinA, proteinB");
+			System.out.println("EditNetworkServlet: " + username + ", " + action + ", " + network_name + ", " + network_creator +", " + Integer.toString(proteinA) + ", " + Integer.toString(proteinB) );
 			String trans = service.networkDelete(username, network_creator, network_name, proteinA, proteinB);
 			if (trans.equals("OK")) {
 				request.setAttribute("network_name", network_name);

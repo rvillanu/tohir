@@ -21,7 +21,7 @@
 			creator = (String) session.getAttribute("username");
 			ownerIsViewing = true;
 		}
-		else if (request.getParameter("from").equals("explore")) {
+		else if (request.getParameter("from").equals("explore") || request.getParameter("from").equals("yourCollaborations")) {
 			creator = (String) request.getParameter("creator");
 		}
 		String network_name = request.getParameter("network_name");
