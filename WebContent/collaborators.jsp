@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
+    pageEncoding="ISO-8859-1" import="java.sql.*"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -39,6 +39,32 @@
 						</td>
 					</form>
 				</tr>
+				<%
+				try {
+					DriverManager.registerDriver(new com.microsoft.sqlserver.jdbc.SQLServerDriver());
+					Connection con = DriverManager.getConnection("jdbc:sqlserver://localhost:1433;databaseName=bimm185",
+							 									"sa", "jose");
+					Statement stmt = con.createStatement();
+					ResultSet rs = stmt.executeQuery("SELECT collaborator FROM Collaborators " + 
+														"WHERE network_creator = '" + request.getParameter("network_creator") + "' " +
+														" AND network_name = '" + request.getParameter("network_name") + "'");
+
+					while (rs.next()) {
+						System.out.println(rs.getString("collaborator"));
+						%>
+						<tr>
+							<td><%=rs.getString("collaborator") %></td>
+						</tr>
+						<%
+					}
+					rs.close();
+					stmt.close();
+					con.close();
+					
+				} catch (Exception e) {
+					System.out.println("collaborators.jsp: " + e.getMessage());
+				}
+				%>
 			</table>
 			<%
 			
