@@ -5,7 +5,7 @@ import java.sql.*;
 public class EditNetworkService {
 	public String requestNetworkInsert() {
 		// session username is NOT owner or collaborator, then this Insert must be a ContributionRequest
-		return "OK";
+		return "Contribution request";
 	}
 	
 	public String networkInsert(String username, String network_creator, String network_name, int newProteinA, int newProteinB) {
@@ -45,7 +45,8 @@ public class EditNetworkService {
 				con.setAutoCommit(true);
 			}
 			else {
-				//requestNetworkInsert();
+				System.out.println("EditNetworkService: sorry, you're not a collaborator. you're gonna have to send a ContributionRequest");
+				return "Contribution request";
 			}
 			// else call requestNetworkInsert in here
 			return "OK";
@@ -59,8 +60,7 @@ public class EditNetworkService {
 	}
 	
 	public String requestNetworkDelete() {
-
-		return "OK";
+		return "Contribution request";
 	}
 	
 	public String networkDelete(String username, String network_creator, String network_name, int proteinA, int proteinB) {
@@ -92,6 +92,11 @@ public class EditNetworkService {
 				pstmt.executeUpdate();
 				con.commit();
 				con.setAutoCommit(true);
+			}
+			
+			else {
+				System.out.println("EditNetworkService: sorry, you're not a collaborator. you're gonna have to send a ContributionRequest");
+				return "Contribution request";
 			}
 			
 			return "OK";

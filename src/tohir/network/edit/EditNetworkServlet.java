@@ -57,6 +57,16 @@ public class EditNetworkServlet extends HttpServlet {
 				dispatcher.forward(request, response);
 				//response.sendRedirect("edit.jsp"); // should send to a page asking if he's done adding contributions
 			}
+			if (trans.equals("Contribution request")) {
+				// requestDispatcher...send to a Contribution page
+				request.setAttribute("action", action);
+				request.setAttribute("network_creator", network_creator);
+				request.setAttribute("network_name", network_name);
+				request.setAttribute("newProteinA", newProteinA);
+				request.setAttribute("newProteinB", newProteinB);
+				RequestDispatcher dispatcher = request.getRequestDispatcher("contribution.jsp");
+				dispatcher.forward(request, response);
+			}
 		}
 		if (action.equals("delete")) {
 			int proteinA = Integer.parseInt(request.getParameter("proteinA"));
