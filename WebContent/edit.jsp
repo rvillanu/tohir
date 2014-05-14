@@ -83,11 +83,13 @@ else {
 				}
 				%>
 			</table>
+			<!--  
 			<form action="EditNetworkServlet" method="post">
 				If you'd like to insert multiple interactions, please upload a CSV file. Each line should contain a single binary interaction (ie: HGNC ID of Protein A,HGNC ID of Protein B). Go to <a href="http://www.genenames.org/cgi-bin/download?col=gd_hgnc_id&col=gd_app_sym&col=gd_app_name&col=gd_status&col=gd_prev_sym&col=gd_aliases&col=gd_pub_chrom_map&col=gd_pub_acc_ids&col=gd_pub_refseq_ids&status=Approved&status=Entry+Withdrawn&status_opt=2&where=&order_by=gd_hgnc_id&format=text&limit=&hgnc_dbtag=on&submit=submit">HGNC</a> to find the HGNC ID of your protein.<br>
 				<input type="file" name="networkFile">
 				<input type="submit" value="Upload">
 			</form>
+			 -->
 			<%
 		} catch (Exception e) {
 			System.out.println(e.getMessage()); 
