@@ -58,7 +58,7 @@ public class EditNetworkServlet extends HttpServlet {
 			String trans = service.batchInsert(contributionBatch, network_creator, network_name, username, action, newProteinA, newProteinB); 
 			
 			if (trans.equals("OK")) {
-				response.sendRedirect("batch.jsp");
+				response.sendRedirect("batches.jsp");
 			}
 		}
 	}
