@@ -7,8 +7,8 @@
 <title>Edit</title>
 </head>
 <body>
-Hello <%= (String) session.getAttribute("username") %>! NetworkName: <%=request.getParameter("network_name") %> NetworkCreator: <%=request.getParameter("network_creator") %> 
-
+<a href="home.jsp">home</a>
+Hello <%= (String) session.getAttribute("username") %>! NetworkName: <%=request.getParameter("network_name") %> NetworkCreator: <%=request.getParameter("network_creator") %>
 <%
 if (session.getAttribute("username") == null) {
 	%>
@@ -19,7 +19,7 @@ else {
 	
 	if ( (request.getParameter("network_name") == null && request.getParameter("network_creator") == null) && (request.getAttribute("network_name") == null && request.getAttribute("network_creator") == null) ) {
 		%>
-		<a href="home.jsp">Please choose a network to edit</a>
+		<h3>Please choose a network to edit</h3>
 		<%
 	}
 	else {

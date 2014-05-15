@@ -25,6 +25,7 @@
 		</form>
 		<a href="yourNetworks.jsp">Your networks</a>
 		<a href="new.jsp">Add a new network</a>
+		<a href="batch.jsp">Contribution Batch</a>
 
 	<% 
 	}

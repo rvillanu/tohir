@@ -1,6 +1,10 @@
 package tohir.login;
 
 import java.io.IOException;
+import java.util.Collection;
+import java.util.Map;
+
+import com.google.common.collect.*;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -8,6 +12,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
+import tohir.dto.Contribution;
 
 /**
  * Servlet implementation class LoginServlet
@@ -38,6 +44,8 @@ public class LoginServlet extends HttpServlet {
 		if (result) {
 			HttpSession session = request.getSession();
 			session.setAttribute("username", username);
+			Multimap<String, Contribution> contributionBatch = HashMultimap.create();
+			session.setAttribute("contributionBatch", contributionBatch);
 			response.sendRedirect("home.jsp");
 			return;
 		}
@@ -47,6 +55,21 @@ public class LoginServlet extends HttpServlet {
 		}
 		
 		
+	}
+	
+	public static void main(String[] args) {
+		Multimap<String, String> hmm = HashMultimap.create();
+		hmm.put("A", "insert,1,2");
+		hmm.put("A", "insert,3,4");
+		Map<String, Collection<String>> m = hmm.asMap();
+		System.out.println(hmm.asMap());
+		for (String key : m.keySet()) {
+			for (String value : m.get(key)) {
+				System.out.println(value);
+			}
+		}
+		hmm.remove("A", "insert,1,2");
+		System.out.println(hmm.asMap());
 	}
 
 }

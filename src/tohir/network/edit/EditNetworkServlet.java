@@ -10,6 +10,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import tohir.dto.Contribution;
+
+import com.google.common.collect.*;
+
 /**
  * Servlet implementation class EditNetworkServlet
  */
@@ -39,6 +43,8 @@ public class EditNetworkServlet extends HttpServlet {
 		EditNetworkService service = new EditNetworkService();
 		HttpSession session = request.getSession();
 		String username = (String) session.getAttribute("username");
+		Multimap <String, Contribution> contributionBatch = (Multimap<String, Contribution>) session.getAttribute("contributionBatch");
+		
 		String action = request.getParameter("action");
 		String network_name = request.getParameter("network_name");
 		String network_creator = request.getParameter("network_creator");
@@ -46,42 +52,14 @@ public class EditNetworkServlet extends HttpServlet {
 		if (action.equals("insert")) {
 			int newProteinA  = Integer.parseInt(request.getParameter("newProteinA"));
 			int newProteinB = Integer.parseInt(request.getParameter("newProteinB"));
+			
 			System.out.println("EditNetworkServlet: username, action, network_name, network_creator, newProteinA, newProteinB");
 			System.out.println("EditNetworkServlet: " + username + ", " + action + ", " + network_name + ", " +  network_creator + ", " + Integer.toString(newProteinA) + ", " + Integer.toString(newProteinB));
-			String trans = service.networkInsert(username, network_creator, network_name, newProteinA, newProteinB); 
-			if (trans.equals("OK")) {
-				// you have to use requestDispatcher ... bc you need to resend network_name, network_creator
-				request.setAttribute("network_name", network_name);
-				request.setAttribute("network_creator", network_creator);
-				RequestDispatcher dispatcher = request.getRequestDispatcher("edit.jsp");
-				dispatcher.forward(request, response);
-				//response.sendRedirect("edit.jsp"); // should send to a page asking if he's done adding contributions
-			}
-			if (trans.equals("Contribution request")) {
-				// requestDispatcher...send to a Contribution page
-				request.setAttribute("action", action);
-				request.setAttribute("network_creator", network_creator);
-				request.setAttribute("network_name", network_name);
-				request.setAttribute("newProteinA", newProteinA);
-				request.setAttribute("newProteinB", newProteinB);
-				RequestDispatcher dispatcher = request.getRequestDispatcher("contribution.jsp");
-				dispatcher.forward(request, response);
-			}
-		}
-		if (action.equals("delete")) {
-			int proteinA = Integer.parseInt(request.getParameter("proteinA"));
-			int proteinB = Integer.parseInt(request.getParameter("proteinB"));
-			System.out.println("EditNetworkServlet: username, action, network_name, network_creator, proteinA, proteinB");
-			System.out.println("EditNetworkServlet: " + username + ", " + action + ", " + network_name + ", " + network_creator +", " + Integer.toString(proteinA) + ", " + Integer.toString(proteinB) );
-			String trans = service.networkDelete(username, network_creator, network_name, proteinA, proteinB);
-			if (trans.equals("OK")) {
-				request.setAttribute("network_name", network_name);
-				request.setAttribute("network_creator", network_creator);
-				RequestDispatcher dispatcher = request.getRequestDispatcher("edit.jsp");
-				dispatcher.forward(request, response);
-			}
+			String trans = service.batchInsert(contributionBatch, network_creator, network_name, username, action, newProteinA, newProteinB); 
 			
+			if (trans.equals("OK")) {
+				response.sendRedirect("batch.jsp");
+			}
 		}
 	}
-
 }
