@@ -35,4 +35,10 @@ public class Contribution {
 	public String toString() {
 		return "networkCreator: " + networkCreator + ", networkName: " + networkName + ", requester: " + requester + ", action: " + action + ", newProteinA: " + Integer.toString(newProteinA) + ", newProteinB: " + Integer.toString(newProteinB);
 	}
+	
+	public String simpleToString() {
+		if (action.equals("insert") || action.equals("delete")) 
+			return action + "(" + Integer.toString(newProteinA) + ", " + Integer.toString(newProteinB) + ")";
+		return "update";
+	}
 }

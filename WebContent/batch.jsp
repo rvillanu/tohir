@@ -14,6 +14,9 @@ if (session.getAttribute("username") == null) {
 <%
 }
 else {
+	%>
+	<h3>Your Contribution Batches</h3>
+	<%
 	Multimap<String, Contribution> contributionBatch = (Multimap<String, Contribution>) session.getAttribute("contributionBatch");
 	Map<String, Collection<Contribution>> map = contributionBatch.asMap();
 	for (String key : map.keySet()) {
@@ -29,11 +32,19 @@ else {
 			for (Contribution dml : contributionBatch.get(key)) {
 				%>
 				<tr>
-					<td><%=dml.toString() %></td>
+					<td><%=dml.simpleToString() %></td>
 				</tr>
 				<%
 			}
 			%>
+			<tr>
+				<td>
+					<form action="BatchServlet" method="post">
+						<input type="hidden" name="batchKey" value="<%=key %>"> 
+						<input type="submit" value="Proceed To Contribute">
+					</form>
+				</td>
+			</tr>
 		</table>
 		<%
 	}
