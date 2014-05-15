@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
+    pageEncoding="ISO-8859-1" import="com.google.common.collect.*" import="tohir.dto.Contribution" import="java.util.Collection" import="java.util.Map"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -14,21 +14,35 @@ if (session.getAttribute("username") == null) {
 	<%
 }
 else {
-	if ( (request.getParameter("network_name") == null && request.getParameter("network_creator") == null) && (request.getAttribute("network_name") == null && request.getAttribute("network_creator") == null) ) {
+	if (request.getParameter("batchKey") == null) {
 		%>
 		<a href="home.jsp">Please choose a network to edit</a>
 		<%
 	}
 	else {
+		String batchKey = request.getParameter("batchKey");
+		String[] networkInfo = batchKey.split(",");
+		String network_creator = networkInfo[0];
+		String network_name = networkInfo[1];
 		%>
 		<h3>Hello, <%= session.getAttribute("username") %></h3>
-		You are trying to contribute to the network <b><%=request.getParameter("network_name") %></b> created by <b><%=request.getParameter("network_creator") %></b>.<br>
+		You are trying to contribute to the network <b><%=network_name%></b> created by <b><%=network_creator%></b>.<br>
 		You want to...<br>
-		<h3><%=request.getParameter("action") %> (<%=request.getParameter("newProteinA") %>, <%=request.getParameter("newProteinB") %>)</h3>
-		Send a message to <b><%=request.getParameter("network_creator") %></b>.<br>
+		<%
+		Multimap<String, Contribution> contributionBatch = (Multimap<String, Contribution>) session.getAttribute("contributionBatch");
+		Map<String, Collection<Contribution>> map = contributionBatch.asMap();
+		for (String key : map.keySet()) {
+			for (Contribution dml : map.get(key)) {
+				%>
+				<h3><b><%=dml.simpleToString() %></b></h3>
+				<%
+			}
+		}
+		%>
+		Send a message to <b><%=network_creator%></b>.<br>
 		<textarea form="contribution"></textarea>
-		<form id="contribution">
-			<input type="submit" value="Send Contribution Request">
+		<form id="contribution" action="ContributionServlet" method="post">
+			<input type="submit" value="Submit Contribution (request if not a collaborator or the creator)">
 		</form>
 		
 		

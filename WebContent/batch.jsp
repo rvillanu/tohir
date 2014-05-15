@@ -39,7 +39,7 @@ else {
 			%>
 			<tr>
 				<td>
-					<form action="BatchServlet" method="post">
+					<form action="contribution.jsp" method="post">
 						<input type="hidden" name="batchKey" value="<%=key %>"> 
 						<input type="submit" value="Proceed To Contribute">
 					</form>
