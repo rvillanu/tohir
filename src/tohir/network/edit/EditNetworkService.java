@@ -12,7 +12,7 @@ public class EditNetworkService {
 		return "Contribution request";
 	}
 	
-	public String batchInsert(Multimap<String, Contribution> contributionBatch, String network_creator, String network_name, String username, String action, int newProteinA, int newProteinB) {
+	public String batchInsertOrDelete(Multimap<String, Contribution> contributionBatch, String network_creator, String network_name, String username, String action, int newProteinA, int newProteinB) {
 		String networkInfo = network_creator + "," + network_name;
 		Contribution contrib = new Contribution(network_creator, network_name, username, action, newProteinA, newProteinB);
 		contributionBatch.put(networkInfo, contrib);

@@ -55,7 +55,18 @@ public class EditNetworkServlet extends HttpServlet {
 			
 			System.out.println("EditNetworkServlet: username, action, network_name, network_creator, newProteinA, newProteinB");
 			System.out.println("EditNetworkServlet: " + username + ", " + action + ", " + network_name + ", " +  network_creator + ", " + Integer.toString(newProteinA) + ", " + Integer.toString(newProteinB));
-			String trans = service.batchInsert(contributionBatch, network_creator, network_name, username, action, newProteinA, newProteinB); 
+			String trans = service.batchInsertOrDelete(contributionBatch, network_creator, network_name, username, action, newProteinA, newProteinB); 
+			
+			if (trans.equals("OK")) {
+				response.sendRedirect("batches.jsp");
+			}
+		}
+		if (action.equals("delete")) {
+			int proteinA = Integer.parseInt(request.getParameter("proteinA"));
+			int proteinB = Integer.parseInt(request.getParameter("proteinB"));
+			System.out.println("EditNetworkServlet: username, action, network_name, network_creator, proteinA, proteinB");
+			System.out.println("EditNetworkServlet: " + username + ", " + action + ", " + network_name + ", " +  network_creator + ", " + Integer.toString(proteinA) + ", " + Integer.toString(proteinB));
+			String trans = service.batchInsertOrDelete(contributionBatch, network_creator, network_name, username, action, proteinA, proteinB);
 			
 			if (trans.equals("OK")) {
 				response.sendRedirect("batches.jsp");
