@@ -40,8 +40,10 @@ else {
 		}
 		%>
 		Send a message to <b><%=network_creator%></b>.<br>
-		<textarea form="contribution"></textarea>
+		
 		<form id="contribution" action="ContributionServlet" method="post">
+			<input type="hidden" name="batchKey" value="<%=batchKey %>">
+			<textarea form="contribution" name="message" required></textarea>
 			<input type="submit" value="Submit Contribution (request if not a collaborator or the creator)">
 		</form>
 		

@@ -25,6 +25,7 @@ public class ContributionWriter {
 		
 		try {
 			// https://www.youtube.com/watch?v=dvI46rF85wM
+			// or https://www.youtube.com/watch?v=HWoVxBcvy1s
 			//DocumentBuilderFactory
 			DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
 			//DocumentBuilder
@@ -83,5 +84,7 @@ public class ContributionWriter {
 	public static void main(String[] args) throws FileNotFoundException, ParserConfigurationException, IOException {
 		ContributionWriter cw = new ContributionWriter();
 		cw.writeContributionsXML("charles", "ryan", "A");
+		
+		
 	}
 }

@@ -16,8 +16,14 @@ public class Contribution {
 		this.networkName = networkName;
 		this.requester = requester;
 		this.action = action;
-		this.newProteinA = newProteinA;
-		this.newProteinB = newProteinB;
+		if (newProteinA < newProteinB) {
+			this.newProteinA = newProteinA;
+			this.newProteinB = newProteinB;
+		}
+		else {
+			this.newProteinA = newProteinB;
+			this.newProteinB = newProteinA;
+		}
 	}
 	
 	// Contribution is an UPDATE to an existing network
@@ -26,10 +32,22 @@ public class Contribution {
 		this.networkName = networkName;
 		this.requester = requester;
 		this.action = action;
-		this.newProteinA = newProteinA;
-		this.newProteinB = newProteinB;
-		this.oldProteinA = oldProteinA;
-		this.oldProteinB = oldProteinB;
+		if (newProteinA < newProteinB) {
+			this.newProteinA = newProteinA;
+			this.newProteinB = newProteinB;
+		}
+		else {
+			this.newProteinA = newProteinB;
+			this.newProteinB = newProteinA;
+		}
+		if (oldProteinA < oldProteinB) {
+			this.oldProteinA = oldProteinA;
+			this.oldProteinB = oldProteinB;
+		}
+		else {
+			this.oldProteinA = oldProteinB;
+			this.oldProteinB = oldProteinA;
+		}
 	}
 	
 	public String toString() {
@@ -40,5 +58,37 @@ public class Contribution {
 		if (action.equals("insert") || action.equals("delete")) 
 			return action + "(" + Integer.toString(newProteinA) + ", " + Integer.toString(newProteinB) + ")";
 		return "update";
+	}
+	
+	public String generateNetworkEdgesDMLStatement() {
+		String action = this.action.toLowerCase();
+		if (action.equals("insert")) {
+			return "INSERT INTO NetworkEdges VALUES ('" + this.networkCreator + "','" + this.networkName + "'," +
+					Integer.toString(this.newProteinA) + "," + Integer.toString(this.newProteinB) + ")";
+		}
+		if (action.equals("delete")) {
+			return "DELETE FROM NetworkEdges " + 
+					"WHERE network_creator = '" + this.networkCreator + "' " +
+					"AND network_name = '" + this.networkName + "' " +
+					"AND proteinA_id = " + Integer.toString(this.newProteinA) + 
+					" AND proteinB_id = " + Integer.toString(this.newProteinB);
+		}
+		if (action.equals("update")) {
+			return "UPDATE";
+		}
+		return "";
+	}
+	
+	public String generateContributionDMLStatement(String status, String message) {
+//		if (this.oldProteinA == 0 && this.oldProteinB != 0) {
+//			return "INSERT INTO Contribution VALUES ('" + this.requester + "','" + this.networkCreator + "','" + this.networkName + "',CURRENT_TIMESTAMP,'" + status + "','" + message + "','" + this.action +"'," + Integer.toString(newProteinA) + "," + Integer.toString(newProteinB) + ",null," + Integer.toString(oldProteinB) + ")";
+//		}
+//		if (this.oldProteinA != 0 && this.oldProteinB == 0) {
+//			return "INSERT INTO Contribution VALUES ('" + this.requester + "','" + this.networkCreator + "','" + this.networkName + "',CURRENT_TIMESTAMP,'" + status + "','" + message + "','" + this.action +"'," + Integer.toString(newProteinA) + "," + Integer.toString(newProteinB) + "," + Integer.toString(oldProteinA) + ",null)";
+//		}
+//		if (this.oldProteinA == 0 && this.oldProteinB == 0) {
+//			return "INSERT INTO Contribution VALUES ('" + this.requester + "','" + this.networkCreator + "','" + this.networkName + "',CURRENT_TIMESTAMP,'" + status + "','" + message + "','" + this.action +"'," + Integer.toString(newProteinA) + "," + Integer.toString(newProteinB) + ",null,null)";
+//		}
+		return "INSERT INTO Contribution VALUES ('" + this.requester + "','" + this.networkCreator + "','" + this.networkName + "',CURRENT_TIMESTAMP,'" + status + "','" + message + "','" + this.action +"'," + Integer.toString(newProteinA) + "," + Integer.toString(newProteinB) + "," + Integer.toString(oldProteinA) + "," + Integer.toString(oldProteinB) + ")";   
 	}
 }
